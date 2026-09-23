@@ -61,9 +61,10 @@ export function init({ reduced }) {
   const pct = document.documentElement.dataset.eggDiscount || '10';
   const bookingId = document.querySelector('.section--booking')?.id;
 
-  progress.innerHTML = Array.from({ length: TOTAL }, () => `<svg aria-hidden="true"><use href="${spriteHref}"/></svg>`).join('');
+  progress.innerHTML = Array.from({ length: TOTAL }, () => `<svg aria-hidden="true"><use href="${spriteHref}"/></svg>`).join('') + '<span class="egg-progress__count" aria-hidden="true"></span>';
   progress.setAttribute('role', 'img');
-  const slots = [...progress.children];
+  const slots = [...progress.querySelectorAll('svg')];
+  const count = progress.querySelector('.egg-progress__count');
 
   const render = (upTo = found.size) => {
     buttons.forEach((b) => {
@@ -72,6 +73,7 @@ export function init({ reduced }) {
       b.setAttribute('aria-pressed', String(isFound));
     });
     slots.forEach((s, i) => s.classList.toggle('is-found', i < upTo));
+    count.textContent = `${found.size}/${TOTAL}`;
     progress.setAttribute('aria-label', t('scarabProgress', { n: found.size }));
     progress.hidden = found.size === 0;
   };
@@ -88,9 +90,11 @@ export function init({ reduced }) {
       const r = b.getBoundingClientRect();
       burst(r.left + r.width / 2, r.top + r.height / 2);
       render(n - 1); // show the slot filling only once the scarab lands
-      await fly(b, slots[n - 1], spriteHref);
-      slots[n - 1].classList.add('is-landing');
-      setTimeout(() => slots[n - 1].classList.remove('is-landing'), 400);
+      // on phones only the first slot is shown (plus a count), so land there
+      const slot = slots[n - 1].getBoundingClientRect().width ? slots[n - 1] : slots[0];
+      await fly(b, slot, spriteHref);
+      slot.classList.add('is-landing');
+      setTimeout(() => slot.classList.remove('is-landing'), 400);
     }
     render();
     if (n >= TOTAL) {

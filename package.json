@@ -1,0 +1,9 @@
+{
+  "name": "escape-room-poc",
+  "private": true,
+  "description": "Bilingual (NL/EN) landing page for an Egyptian/mummy-themed escape room. Static site; the only build step fills placeholders into the page templates.",
+  "scripts": {
+    "fill": "node scripts/fill-placeholders.mjs",
+    "dev": "node scripts/fill-placeholders.mjs && npx --yes serve -l 5173 ."
+  }
+}

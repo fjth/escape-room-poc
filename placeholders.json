@@ -2,7 +2,7 @@
   "_note": "DEMO VALUES — realistic stand-ins, not real business data. Replace before launch, then run `npm run fill`.",
   "ROOM_NAME": "Nefer-Ka",
   "COMPANY_NAME": "Zandloper Escape Rooms B.V.",
-  "SITE_URL": "https://example.com",
+  "SITE_URL": "https://fjth.github.io/escape-room-poc",
   "TAGLINE_NL": "De vloek van de vergeten farao",
   "TAGLINE_EN": "The curse of the forgotten pharaoh",
   "CITY": "Utrecht",

@@ -3,8 +3,6 @@ export const strings = {
   nl: {
     audioOn: 'Tombe-geluid uitzetten',
     audioOff: 'Tombe-geluid aanzetten',
-    langHint: 'This page is also available in English →',
-    langHintClose: 'Close',
     scarabFound: 'Scarabee gevonden! ({n} van 5)',
     scarabProgress: 'Scarabeeën gevonden: {n} van 5',
     scarabAll: 'Alle vijf de scarabeeën gevonden! De farao beloont je met {pct}% korting. Code <code>{code}</code> staat al klaar in je boeking.',
@@ -23,12 +21,11 @@ export const strings = {
     bookCodeBad: 'Deze code kennen we niet. Al op zoek naar de scarabeeën?',
     bookMissing: 'Kies nog een datum en een tijd.',
     bookDone: '{when} · {group} · totaal {total}.',
+    mummyMsg: 'Je hebt de mummie gewekt. Hij ligt weer in zijn kist… denken we.',
   },
   en: {
     audioOn: 'Turn tomb ambience off',
     audioOff: 'Turn tomb ambience on',
-    langHint: 'Deze pagina is ook in het Nederlands beschikbaar →',
-    langHintClose: 'Sluiten',
     scarabFound: 'Scarab found! ({n} of 5)',
     scarabProgress: 'Scarabs found: {n} of 5',
     scarabAll: 'You found all five scarabs! The pharaoh rewards you with {pct}% off. Code <code>{code}</code> is already applied to your booking.',
@@ -47,6 +44,7 @@ export const strings = {
     bookCodeBad: "We don't know that code. Hunting for scarabs yet?",
     bookMissing: 'Please pick a date and a time.',
     bookDone: '{when} · {group} · total {total}.',
+    mummyMsg: "You woke the mummy. He's back in his coffin… we think.",
   },
 };
 

@@ -6,18 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Nefer-Ka — Egyptische escape room in Utrecht</title>
   <meta name="description" content="Ontsnap uit een eeuwenoude tombe. Nefer-Ka is een Egyptische escape room in Utrecht voor 2–6 spelers, te spelen in het Nederlands of Engels. Boek nu.">
-  <link rel="canonical" href="https://example.com/">
-  <link rel="alternate" hreflang="nl" href="https://example.com/">
-  <link rel="alternate" hreflang="en" href="https://example.com/en/">
-  <link rel="alternate" hreflang="x-default" href="https://example.com/">
+  <link rel="canonical" href="https://fjth.github.io/escape-room-poc/">
+  <link rel="alternate" hreflang="nl" href="https://fjth.github.io/escape-room-poc/">
+  <link rel="alternate" hreflang="en" href="https://fjth.github.io/escape-room-poc/en/">
+  <link rel="alternate" hreflang="x-default" href="https://fjth.github.io/escape-room-poc/">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="nl_NL">
   <meta property="og:locale:alternate" content="en_GB">
   <meta property="og:title" content="Nefer-Ka — Egyptische escape room in Utrecht">
   <meta property="og:description" content="Het graf bleef drieduizend jaar verzegeld. Jullie hebben 60 minuten om eruit te komen.">
-  <meta property="og:url" content="https://example.com/">
-  <meta property="og:image" content="https://example.com/assets/img/og-nl.jpg">
+  <meta property="og:url" content="https://fjth.github.io/escape-room-poc/">
+  <meta property="og:image" content="https://fjth.github.io/escape-room-poc/assets/img/og-nl.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0f0c08">
 
@@ -26,7 +26,7 @@
   <link rel="preload" href="assets/fonts/cinzel-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/crimson-pro-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
-  <script>document.documentElement.classList.add('js')</script>
+  <script>(function(d){d.classList.add('js');try{var force=/[?&]intro\b/.test(location.search);if(force||(!localStorage.getItem('introSeen')&&!location.hash&&!matchMedia('(prefers-reduced-motion: reduce)').matches))d.classList.add('intro')}catch(e){}})(document.documentElement)</script>
   <script type="module" src="js/main.js"></script>
 
   <script type="application/ld+json">
@@ -35,10 +35,10 @@
     "@type": "EntertainmentBusiness",
     "name": "Nefer-Ka — Zandloper Escape Rooms B.V.",
     "description": "Egyptische escape room in Utrecht, te spelen in het Nederlands of Engels.",
-    "url": "https://example.com/",
+    "url": "https://fjth.github.io/escape-room-poc/",
     "telephone": "+31 30 123 4567",
     "email": "info@example.com",
-    "image": "https://example.com/assets/img/og-nl.jpg",
+    "image": "https://fjth.github.io/escape-room-poc/assets/img/og-nl.jpg",
     "priceRange": "€€",
     "address": {
       "@type": "PostalAddress",
@@ -139,6 +139,19 @@
 </svg>
   <a class="skip-link" href="#main">Naar de inhoud</a>
 
+  <!-- First-visit intro: sealed tomb doors part (CSS-driven; js/fx/intro.js handles skip + cleanup) -->
+  <div class="tomb-intro" aria-hidden="true">
+    <div class="tomb-intro__door tomb-intro__door--l">
+      <p class="tomb-intro__glyphs">𓂀𓆣𓋹𓇳𓊽𓂀𓆣𓋹𓇳𓊽𓂀𓆣𓋹</p>
+      <span class="tomb-intro__seal"><svg><use href="#ankh"/></svg></span>
+    </div>
+    <div class="tomb-intro__door tomb-intro__door--r">
+      <p class="tomb-intro__glyphs">𓂀𓆣𓋹𓇳𓊽𓂀𓆣𓋹𓇳𓊽𓂀𓆣𓋹</p>
+      <span class="tomb-intro__seal"><svg><use href="#ankh"/></svg></span>
+    </div>
+    <span class="tomb-intro__light"></span>
+  </div>
+
   <header class="site-header" data-header>
     <div class="site-header__bar">
       <a class="brand" href="#top">
@@ -169,7 +182,7 @@
           <a href="en/" hreflang="en" lang="en" data-lang-link="en"><span aria-hidden="true">EN</span><span class="sr-only">English</span></a>
           <span class="lang-switch__pill" aria-hidden="true"></span>
         </nav>
-        <a class="btn btn--gold btn--sm header-cta" href="#boeken" data-cta><span data-cta-label>Boek nu</span></a>
+        <a class="sarco sarco--sm header-cta" href="#boeken" data-sarco data-cta><span class="sarco__label"><span data-cta-label>Boek nu</span></span></a>
       </div>
       <span class="site-header__progress" aria-hidden="true"></span>
     </div>
@@ -204,8 +217,7 @@
         <p class="hero__hook">Het graf bleef drieduizend jaar verzegeld. Jullie hebben 60 minuten om eruit te komen.</p>
         <div class="hero__actions">
           <a class="sarco" href="#boeken" data-sarco data-cta>
-            <span class="sarco__glow" aria-hidden="true"></span>
-            <span class="sarco__lid"><svg class="icon" aria-hidden="true"><use href="#ankh"/></svg><span data-cta-label>Boek nu</span></span>
+            <span class="sarco__label"><svg class="icon" aria-hidden="true"><use href="#ankh"/></svg><span data-cta-label>Boek nu</span></span>
           </a>
           <a class="btn btn--ghost" href="#verhaal">Lees het verhaal</a>
         </div>
@@ -264,24 +276,22 @@
           <h2 id="story-title" data-decode>Het verhaal</h2>
         </div>
         <div class="papyrus" data-papyrus>
-          <div class="papyrus__rod" aria-hidden="true"></div>
-          <div class="papyrus__roll">
-            <div>
-              <div class="papyrus__sheet">
-                <p>In 1922 verdween archeoloog Elise Vermeer spoorloos tijdens een opgraving in de Vallei der Koningen. Haar laatste dagboek stopt midden in een zin, naast een schets van een deur die op geen enkele kaart staat.</p>
-                <p>Een eeuw later is die deur gevonden — en jullie team mag als eerste naar binnen. Achter je schuift de steen dicht.</p>
-                <p>Ergens in het donker ligt de weg naar buiten. En iets dat al heel, heel lang op bezoek wacht.</p>
-                <div class="papyrus__sign">
-                  <svg aria-hidden="true"><use href="#ankh"/></svg>
-                  <button class="scarab-egg scarab-egg--papyrus" type="button" data-scarab="4" aria-label="Verborgen scarabee">
-                    <svg aria-hidden="true"><use href="#scarab"/></svg>
-                  </button>
-                  <svg aria-hidden="true"><use href="#lotus"/></svg>
-                </div>
-              </div>
+          <div class="papyrus__sheet">
+            <p>In 1922 verdween archeoloog Elise Vermeer spoorloos tijdens een opgraving in de Vallei der Koningen. Haar laatste dagboek stopt midden in een zin, naast een schets van een deur die op geen enkele kaart staat.</p>
+            <p>Een eeuw later is die deur gevonden — en jullie team mag als eerste naar binnen. Achter je schuift de steen dicht.</p>
+            <p>Ergens in het donker ligt de weg naar buiten. En iets dat al heel, heel lang op bezoek wacht.</p>
+            <div class="papyrus__sign">
+              <svg aria-hidden="true"><use href="#ankh"/></svg>
+              <button class="scarab-egg scarab-egg--papyrus" type="button" data-scarab="4" aria-label="Verborgen scarabee">
+                <svg aria-hidden="true"><use href="#scarab"/></svg>
+              </button>
+              <svg aria-hidden="true"><use href="#lotus"/></svg>
             </div>
+            <div class="papyrus__dust" aria-hidden="true"></div>
           </div>
-          <div class="papyrus__rod papyrus__rod--bottom" aria-hidden="true"></div>
+          <div class="papyrus__lip" aria-hidden="true"></div>
+          <div class="papyrus__roll" aria-hidden="true"><span class="papyrus__seal"></span></div>
+          <canvas class="papyrus__sand" aria-hidden="true"></canvas>
         </div>
       </div>
     </section>
@@ -429,8 +439,7 @@
                   </div>
                   <p class="booker__error" data-booker-error aria-live="assertive"></p>
                   <button type="submit" class="sarco sarco--block">
-                    <span class="sarco__glow" aria-hidden="true"></span>
-                    <span class="sarco__lid"><svg class="icon" aria-hidden="true"><use href="#ankh"/></svg>Reserveer</span>
+                    <span class="sarco__label"><svg class="icon" aria-hidden="true"><use href="#ankh"/></svg>Reserveer</span>
                   </button>
                 </div>
               </div>
@@ -447,8 +456,7 @@
           <!-- Without JS: book by email/phone -->
           <div class="booking__fallback" data-booking-fallback>
             <a class="sarco" href="mailto:info@example.com?subject=Boeking%20Nefer-Ka" data-sarco>
-              <span class="sarco__glow" aria-hidden="true"></span>
-              <span class="sarco__lid"><svg class="icon" aria-hidden="true"><use href="#ankh"/></svg>Boek nu</span>
+              <span class="sarco__label"><svg class="icon" aria-hidden="true"><use href="#ankh"/></svg>Boek nu</span>
             </a>
           </div>
           <p class="booking__alt-label">Liever bellen of mailen?</p>
@@ -510,6 +518,37 @@
             <div class="slab__body"><div><p>Je betaalt online bij het boeken met iDEAL. Pinnen op locatie kan ook voor extraatjes of cadeaubonnen.</p></div></div>
           </details>
         </div>
+        <!-- Easter egg: something is inside this sarcophagus (js/fx/mummy.js) -->
+        <button class="coffin" type="button" data-coffin aria-label="Een gesloten sarcofaag">
+          <svg viewBox="0 0 90 210" aria-hidden="true">
+            <defs>
+              <linearGradient id="cf-gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b4f0c"/><stop offset=".45" stop-color="#f0cf6a"/><stop offset=".6" stop-color="#c9a227"/><stop offset="1" stop-color="#5e440a"/></linearGradient>
+              <radialGradient id="cf-inside" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#ffe6a8"/><stop offset=".35" stop-color="#e98a2a"/><stop offset=".8" stop-color="#3a1606"/></radialGradient>
+              <pattern id="cf-stripes" width="10" height="6" patternUnits="userSpaceOnUse"><rect width="10" height="3" fill="#d9b44a"/><rect y="3" width="10" height="3" fill="#1f3a68"/></pattern>
+              <clipPath id="cf-shape"><path d="M45 6C63 6 74 20 74 40C74 52 70 58 72 66C82 72 85 88 83 106C81 136 72 166 67 198C66 205 24 205 23 198C18 166 9 136 7 106C5 88 8 72 18 66C20 58 16 52 16 40C16 20 27 6 45 6Z"/></clipPath>
+            </defs>
+            <path class="coffin__inside" d="M45 6C63 6 74 20 74 40C74 52 70 58 72 66C82 72 85 88 83 106C81 136 72 166 67 198C66 205 24 205 23 198C18 166 9 136 7 106C5 88 8 72 18 66C20 58 16 52 16 40C16 20 27 6 45 6Z" fill="url(#cf-inside)"/>
+            <g class="coffin__lid">
+              <g clip-path="url(#cf-shape)">
+                <path d="M45 6C63 6 74 20 74 40C74 52 70 58 72 66C82 72 85 88 83 106C81 136 72 166 67 198C66 205 24 205 23 198C18 166 9 136 7 106C5 88 8 72 18 66C20 58 16 52 16 40C16 20 27 6 45 6Z" fill="#1b2740"/>
+                <path d="M45 8C62 8 72 21 72 40C72 52 69 58 71 66L60 70C60 58 58 50 58 44L32 44C32 50 30 58 30 70L19 66C21 58 18 52 18 40C18 21 28 8 45 8Z" fill="url(#cf-stripes)"/>
+                <ellipse cx="45" cy="37" rx="12" ry="15" fill="url(#cf-gold)"/>
+                <path d="M36 33q4.5-3.5 8 0q-4 3-8 0zM46 33q4.5-3.5 8 0q-4 3-8 0z" fill="#120d07"/>
+                <circle class="coffin__eye" cx="40" cy="33" r="1.7" fill="#ff9a3a"/>
+                <circle class="coffin__eye" cx="50" cy="33" r="1.7" fill="#ff9a3a"/>
+                <rect x="42.5" y="51" width="5" height="9" rx="1.5" fill="#1f3a68"/>
+                <path d="M19 70C30 85 60 85 71 70" stroke="#3aa6a0" stroke-width="4" fill="none"/>
+                <path d="M16 77C30 94 60 94 74 77" stroke="#d9b44a" stroke-width="3" fill="none"/>
+                <path d="M14 85C30 103 60 103 76 85" stroke="#2d4f8a" stroke-width="3" fill="none"/>
+                <path d="M24 104L62 120M66 104L28 120" stroke="url(#cf-gold)" stroke-width="5" stroke-linecap="round"/>
+                <rect x="41" y="124" width="8" height="80" fill="url(#cf-gold)"/>
+                <path d="M43 132h4M43 142h4M43 152h4M43 162h4M43 172h4M43 182h4" stroke="#1b2740" stroke-width="2.5"/>
+                <path d="M8 140H39M51 140H82M10 165H39M51 165H80M14 190H39M51 190H76" stroke="#c9a227" stroke-width="1.6" opacity=".8"/>
+              </g>
+              <path d="M45 6C63 6 74 20 74 40C74 52 70 58 72 66C82 72 85 88 83 106C81 136 72 166 67 198C66 205 24 205 23 198C18 166 9 136 7 106C5 88 8 72 18 66C20 58 16 52 16 40C16 20 27 6 45 6Z" fill="none" stroke="url(#cf-gold)" stroke-width="2"/>
+            </g>
+          </svg>
+        </button>
       </div>
     </section>
 

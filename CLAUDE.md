@@ -29,8 +29,8 @@ The site itself should feel like the first minute of the game: atmospheric, tact
 - Two real pages, not a JS text swap: `/` (nl) and `/en/` (en). Better for SEO and sharing.
 - Both pages have identical structure; only the copy differs. When changing markup in one, apply the same change to the other in the same step.
 - `<html lang="nl">` / `<html lang="en">`, `hreflang` alternate links on both pages (+ `x-default` → nl), translated `<title>`, meta description and Open Graph tags.
-- Language switcher styled as a pair of **cartouches** (NL / EN) in the header; it links to the equivalent section on the other page (keep the `#hash`).
-- No automatic redirect. If the browser language is not Dutch and the visitor lands on `/`, show a small dismissible hint: "This page is also available in English →".
+- Language switcher styled as a **cartouche** with a sliding gold pill (NL / EN) in the header; it links to the equivalent section on the other page (keep the `#hash`).
+- No automatic redirect, and no "also available in English" banner (the owner rejected it: the switcher is obvious enough).
 - Mention clearly on both pages that the game itself can be played in Dutch **or** English.
 - All UI strings used by JS (aria-labels, easter-egg messages, hints) live in a `data-` attribute or a small `strings` object keyed by `document.documentElement.lang`.
 - Copy tone: Dutch informal "je"; English natural, not a literal translation.
@@ -67,9 +67,9 @@ Build these as independent modules in `/js/fx/`, each progressively enhancing pl
 
 1. **Torchlight hero** — the hero is almost black; a warm radial "torch" light follows the pointer (on touch: follows the finger, or drifts slowly on its own) and reveals hieroglyphs and a hidden message on the wall. Flame flicker via subtle randomized radius/intensity. CSS `mask-image` / radial-gradient driven by CSS variables set from JS.
 2. **Hieroglyph decode headings** — section headings first appear as glyphs (Unicode Egyptian hieroglyphs block U+13000 or SVG glyphs) and "decode" letter by letter into the real text when scrolled into view (IntersectionObserver).
-3. **Papyrus unroll** — the story section unrolls horizontally/vertically as it enters the viewport, with a slight paper-curl shadow.
+3. **Papyrus unroll** — the story is an authentic rolled papyrus (no wooden rods): crumpled, fibrous, ragged edges. In view, its clay seal cracks, the roll tumbles down unrolling the sheet while sand trickles off it (canvas particles), then the sand is brushed off the text (`papyrus.js`).
 4. **Drifting sand** — lightweight canvas particle layer of dust/sand in the hero and between sections. Low particle count, paused when off-screen or tab hidden.
-5. **Sarcophagus CTA** — the main booking button is a small sarcophagus/tomb door; on hover the lid shifts and golden light leaks out; on click it opens before navigating to booking.
+5. **Book-now CTA** (`.sarco`, `sarcophagus.js`) — solid gold, dark engraved text. Hover: lifts, soft gold glow, gradient shimmer, a thin light travels around the edge; press: sinks slightly + soft ripple; subtle magnetic pull on desktop. No delays, no split/door gimmicks (the owner found the lid/door versions dated). Header CTA is the small variant (`.sarco--sm`), never wraps.
 6. **Stone slab FAQ** — slabs grind open with a short easing and optional sound.
 7. **Hidden scarabs mini-game** — 5 small scarabs are hidden across the page (hero wall, price tablet, papyrus signs, inside an FAQ answer, footer). A found scarab bursts and flies into a 5-slot progress cartouche in the header. Finding all five reveals `{{EASTER_EGG_CODE}}` (`{{EASTER_EGG_DISCOUNT}}`% off), which is auto-applied in the booking widget (`scarabs:complete` event). Progress persists in localStorage across both languages. Fully optional; never blocks anything.
 8. **Opening countdown (only if not open yet)** — an hourglass/sand timer counting down to `{{OPENING_DATE}}`, with an email signup instead of booking.
@@ -78,6 +78,8 @@ Build these as independent modules in `/js/fx/`, each progressively enhancing pl
 11. **Page-wide torchlight** (desktop) — after the hero, the light keeps following the pointer and reveals parallax hieroglyph columns on the walls (`lantern.js`).
 12. **Tactile details** (desktop) — 3D tilt + pointer sheen on tiles/tablets/map (`tilt.js`, `data-tilt`); Eye of Horus ornaments whose pupils follow the pointer (`watcher.js`).
 13. **Language switch** — sliding gold pill in a single cartouche; cross-page view transition between `/` and `/en/` (CSS `@view-transition`), header and CTA stay put (fixed-width CTA).
+15. **First-visit intro** (`intro.js`, CSS on `html.intro`) — sealed tomb doors with a split gold seal; a crack of light, then the doors part and reveal the hero. Only on the first visit (localStorage), skipped with a #hash, by any input, or with reduced motion; `?intro` replays it.
+16. **Mummy coffin easter egg** (`mummy.js`, `mummy-art.js`) — *parked for the demo: off via `FEATURES.mummy` in `js/main.js`, which also hides the coffin (`html.has-mummy`).* a sarcophagus beside the FAQ rattles, drops dust and glints its eyes now and then. Hovering 2.6s (desktop) or clicking/tapping it triggers a short jump scare: a procedurally drawn mummy lunges out of the screen (single flash, no strobing, Esc closes); reduced motion gets a gentle static reveal. Sounds (scarab chime, mummy roar) only play when the ambient audio toggle is on.
 14. **Demo booking widget** (`booker.js`) — calendar, time slots, players, game language, discount code, price summary. Fake, deterministic availability; no real booking. To be replaced by the `{{BOOKING}}` widget; the no-JS fallback is email/phone.
 
 ## Performance & accessibility (non-negotiable)

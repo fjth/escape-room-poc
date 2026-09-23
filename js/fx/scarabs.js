@@ -2,6 +2,8 @@
 // to the booking automatically. Entirely optional; progress is remembered in
 // localStorage when available. A found scarab bursts and flies to the header.
 import { t } from '../strings.js';
+import { toast } from './toast.js';
+import { chime } from './audio.js';
 
 const KEY = 'scarabsFound';
 const TOTAL = 5;
@@ -11,36 +13,6 @@ function load() {
 }
 function save(found) {
   try { localStorage.setItem(KEY, JSON.stringify([...found])); } catch { /* private mode */ }
-}
-
-let toastEl;
-let toastTimer;
-function toast(html, actions = []) {
-  if (!toastEl) {
-    toastEl = document.createElement('div');
-    toastEl.className = 'toast';
-    toastEl.setAttribute('role', 'status');
-    document.body.append(toastEl);
-  }
-  clearTimeout(toastTimer);
-  toastEl.innerHTML = `<p style="margin:0">${html}</p>`;
-  const hide = () => toastEl.classList.remove('is-visible');
-  if (actions.length) {
-    const row = document.createElement('div');
-    row.className = 'toast__actions';
-    for (const { label, primary, onClick } of actions) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = `btn btn--sm ${primary ? 'btn--gold' : 'btn--ghost'}`;
-      b.textContent = label;
-      b.addEventListener('click', () => { hide(); onClick?.(); });
-      row.append(b);
-    }
-    toastEl.append(row);
-  } else {
-    toastTimer = setTimeout(hide, 3200);
-  }
-  requestAnimationFrame(() => toastEl.classList.add('is-visible'));
 }
 
 function burst(x, y) {
@@ -111,6 +83,7 @@ export function init({ reduced }) {
     found.add(b.dataset.scarab);
     save(found);
     const n = found.size;
+    chime(n >= TOTAL);
     if (!reduced) {
       const r = b.getBoundingClientRect();
       burst(r.left + r.width / 2, r.top + r.height / 2);

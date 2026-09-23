@@ -8,14 +8,19 @@ The site itself should feel like the first minute of the game: atmospheric, tact
 - Static site, no framework. Vanilla HTML, CSS and JS (ES modules).
 - Structure:
   ```
-  /index.html          → Dutch (default)
-  /en/index.html       → English
-  /css/styles.css      → shared
-  /js/main.js          → shared; imports modules from /js/fx/
-  /js/fx/*.js          → one file per interaction (torch.js, glyphs.js, sand.js, …)
+  /templates/index.html     → Dutch page source (with {{PLACEHOLDER}} markers) — EDIT THIS
+  /templates/en/index.html  → English page source — EDIT THIS
+  /placeholders.json        → values for the markers (shared + _NL/_EN variants)
+  /scripts/fill-placeholders.mjs → generates the pages below from templates + JSON
+  /index.html               → Dutch (default) — GENERATED, don't edit by hand
+  /en/index.html            → English — GENERATED, don't edit by hand
+  /css/styles.css           → shared
+  /js/strings.js            → all JS UI strings, keyed by lang
+  /js/main.js               → shared; imports modules from /js/fx/
+  /js/fx/*.js               → one file per interaction (torch.js, glyphs.js, sand.js, …)
   /assets/img, /assets/svg, /assets/fonts, /assets/audio
   ```
-- Dev server: `npx serve` or Vite in plain mode is fine; the output must deploy as static files to Netlify / Vercel / GitHub Pages.
+- `npm run dev` regenerates the pages and serves on http://localhost:5173. `npm run fill` only regenerates. Commit the generated pages too; the output must deploy as static files to Netlify / Vercel / GitHub Pages.
 - Dependencies: none by default. GSAP (+ ScrollTrigger) is allowed if an animation genuinely needs it; ask before adding anything else.
 - Fonts: self-hosted, max 2 families. A carved/ancient display face for headings (e.g. Cinzel, Cormorant, or similar with a Latin + Dutch character set) and a readable sans or serif for body.
 - No analytics, trackers or third-party cookies (GDPR/AVG). Maps as a static image linking to Google Maps, not an embed.
@@ -66,9 +71,14 @@ Build these as independent modules in `/js/fx/`, each progressively enhancing pl
 4. **Drifting sand** — lightweight canvas particle layer of dust/sand in the hero and between sections. Low particle count, paused when off-screen or tab hidden.
 5. **Sarcophagus CTA** — the main booking button is a small sarcophagus/tomb door; on hover the lid shifts and golden light leaks out; on click it opens before navigating to booking.
 6. **Stone slab FAQ** — slabs grind open with a short easing and optional sound.
-7. **Hidden scarabs easter egg** — 3 small scarabs are hidden across the page. Finding all three reveals a message (and optionally a discount code `{{EASTER_EGG_CODE}}`). Progress shown as a subtle cartouche that fills in. Fits the escape-room spirit; must be fully optional and not block anything.
+7. **Hidden scarabs mini-game** — 5 small scarabs are hidden across the page (hero wall, price tablet, papyrus signs, inside an FAQ answer, footer). A found scarab bursts and flies into a 5-slot progress cartouche in the header. Finding all five reveals `{{EASTER_EGG_CODE}}` (`{{EASTER_EGG_DISCOUNT}}`% off), which is auto-applied in the booking widget (`scarabs:complete` event). Progress persists in localStorage across both languages. Fully optional; never blocks anything.
 8. **Opening countdown (only if not open yet)** — an hourglass/sand timer counting down to `{{OPENING_DATE}}`, with an email signup instead of booking.
 9. **Optional ambient audio** — off by default. A clearly labelled toggle (brazier icon) for a low wind/tomb ambience. Never autoplay.
+10. **Scroll journey** — floating glass header with scroll-spy pill + progress line (`nav.js`, `scroll.js`); hero content drifts away as you scroll; sections rise into view with a stagger (`reveal.js`, `data-reveal`); winged-sun dividers spread their wings; gold god-rays behind the booking card.
+11. **Page-wide torchlight** (desktop) — after the hero, the light keeps following the pointer and reveals parallax hieroglyph columns on the walls (`lantern.js`).
+12. **Tactile details** (desktop) — 3D tilt + pointer sheen on tiles/tablets/map (`tilt.js`, `data-tilt`); Eye of Horus ornaments whose pupils follow the pointer (`watcher.js`).
+13. **Language switch** — sliding gold pill in a single cartouche; cross-page view transition between `/` and `/en/` (CSS `@view-transition`), header and CTA stay put (fixed-width CTA).
+14. **Demo booking widget** (`booker.js`) — calendar, time slots, players, game language, discount code, price summary. Fake, deterministic availability; no real booking. To be replaced by the `{{BOOKING}}` widget; the no-JS fallback is email/phone.
 
 ## Performance & accessibility (non-negotiable)
 - Every effect respects `prefers-reduced-motion: reduce` (static, fully readable fallback) and stops when out of view.
@@ -84,18 +94,22 @@ Build these as independent modules in `/js/fx/`, each progressively enhancing pl
 - Favicon + apple-touch-icon (scarab or ankh).
 
 ## Placeholders — to fill in with the owner
-Use `{{PLACEHOLDER}}` markers in both HTML files until known:
-- `{{ROOM_NAME}}`, `{{COMPANY_NAME}}`, `{{TAGLINE_NL}}`, `{{TAGLINE_EN}}`
-- `{{CITY}}`, `{{ADDRESS}}`
-- `{{PLAYERS_MIN}}`–`{{PLAYERS_MAX}}`, `{{DURATION}}`, `{{MIN_AGE}}`, `{{DIFFICULTY}}`
-- `{{PRICES}}` per group size
-- `{{BOOKING}}` — which booking system (e.g. Bookeo, Resova, Planyo, Xola) and whether it has NL + EN widgets. Until known: CTA → `#boeken` / `#book` with phone/email fallback.
-- `{{OPENING_DATE}}` — decides booking vs "coming soon + signup" mode.
-- `{{PHONE}}`, `{{EMAIL}}`, `{{KVK}}`, `{{BTW}}`, `{{SOCIALS}}`, `{{EASTER_EGG_CODE}}`
-- Logo and real photos of the room (until then: tasteful, clearly marked placeholders).
+Content that isn't known yet is a `{{PLACEHOLDER}}` marker in the templates; its value lives in `placeholders.json`
+(currently realistic **demo values**, not real business data — see its `_note`). Empty values stay as markers.
+Language-specific text gets an `_NL` key (used only in the NL template) and an `_EN` key (only in the EN template).
+- Identity: `ROOM_NAME`, `COMPANY_NAME`, `TAGLINE_NL/_EN`, `SITE_URL` (no trailing slash)
+- Location: `CITY`, `ADDRESS`, `PARKING_NL/_EN`, `PUBLIC_TRANSPORT_NL/_EN`, `OPENING_HOURS` (schema.org format, e.g. `Mo-Su 10:00-23:00`; JSON-LD only)
+- Game: `PLAYERS_MIN`, `PLAYERS_MAX`, `DURATION`, `MIN_AGE` (plain numbers), `DIFFICULTY_NL/_EN`, `ACCESSIBILITY_NL/_EN`
+- Prices per group size: `PRICE_2`, `PRICE_3_4`, `PRICE_5_PLUS` (incl. € sign), `PRICE_RANGE` (JSON-LD, e.g. `€€`)
+- `BOOKING` — which booking system (e.g. Bookeo, Resova, Planyo, Xola) and whether it has NL + EN widgets. Until known: CTA → `#boeken` / `#book` with phone/email fallback.
+- `OPENING_DATE` (ISO, e.g. `2026-11-15`) — a future date switches to "coming soon + signup" mode; empty = booking mode. `SIGNUP_ACTION` = signup form endpoint (coming-soon mode only). Preview with `?opening=2026-12-01`.
+- Contact & legal: `PHONE`, `EMAIL`, `KVK`, `BTW`, `PRIVACY_URL_NL/_EN`, `SOCIALS_INSTAGRAM`, `SOCIALS_FACEBOOK`
+- `EASTER_EGG_CODE` + `EASTER_EGG_DISCOUNT` (percentage) — reward of the scarab mini-game (visible in page source; fine for a small perk).
+- Not yet as markers: logo, real photos of the room, share images (`assets/img/og-nl.jpg`, `og-en.jpg`), `apple-touch-icon.png`, static map image. Until then: tasteful, clearly marked placeholders.
 
 ## Working agreements
 - Build in this order: static bilingual structure + copy → visual design → interactions one by one → performance/a11y pass.
 - Preview in the browser after each meaningful change, on both a desktop and a mobile viewport, in both languages.
-- Keep NL and EN pages in sync in the same change.
+- Keep NL and EN pages in sync in the same change — edit both files in `templates/`, then run `npm run fill`. Never hand-edit the generated `/index.html` or `/en/index.html`.
+- New content that isn't final yet: add a marker to both templates and a key to `placeholders.json` (split into `_NL`/`_EN` when it's language-specific text).
 - Ask before adding dependencies or any third-party script.

@@ -1,4 +1,2 @@
-/assets
-/css
-/en
-/js
+.DS_Store
+node_modules/
